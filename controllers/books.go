@@ -11,8 +11,8 @@ import (
 
 var logger *log.Logger
 
-func (c *Controller) GetOneMovie(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "movieID"))
+func (c *Controller) GetOneBook(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "bookID"))
 
 	if err != nil {
 		logger.Print(errors.New("invalid id parameter"))
@@ -20,9 +20,9 @@ func (c *Controller) GetOneMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	movie, err := c.Service.GetOneBook(id)
+	book, err := c.Service.GetOneBook(id)
 
-	err = utils.WriteJSON(w, http.StatusOK, movie, "movie")
+	err = utils.WriteJSON(w, http.StatusOK, book, "book")
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
@@ -30,32 +30,16 @@ func (c *Controller) GetOneMovie(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *Controller) GetAllMovies(w http.ResponseWriter, r *http.Request) {
-	movies, err := c.Service.GetAllBooks()
+func (c *Controller) GetAllBooks(w http.ResponseWriter, r *http.Request) {
+	books, err := c.Service.GetAllBooks()
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
 	}
 
-	err = utils.WriteJSON(w, http.StatusOK, movies, "movies")
+	err = utils.WriteJSON(w, http.StatusOK, books, "books")
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
 	}
-}
-
-func DeleteMovie(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func InsertMovie(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func UpdateMovie(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func SearchMovie(w http.ResponseWriter, r *http.Request) {
-
 }

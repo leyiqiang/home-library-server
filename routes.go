@@ -7,7 +7,7 @@ import (
 
 func Routers(c *controllers.Controller) *chi.Mux {
 	router := chi.NewRouter()
-	router.Get("/book/{bookID}", c.GetOneMovie)
-	router.Get("/books", c.GetAllMovies)
+	router.Get("/book/{bookID}", c.GetOneBook)
+	router.Get("/books", c.GetAllBooks)
 	return router
 }
