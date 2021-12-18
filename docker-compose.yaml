@@ -10,14 +10,15 @@ services:
       - db
 
   db:
-    image: postgres
-    cap_add:
-      - SYS_NICE
+    image: mongo
+    container_name: mongo-container
     restart: always
     environment:
-      POSTGRES_PASSWORD: "root"
+      MONGO_INITDB_DATABASE: "home-library"
+      MONGO_INITDB_ROOT_USERNAME: "user"
+      MONGO_INITDB_ROOT_PASSWORD: "secret"
 
     volumes:
-      - .dbdata:/var/lib/mysql
+      - ./mongo-volume:/data/db
     ports:
-      - "5432:5432"
+      - "27017:27017"
