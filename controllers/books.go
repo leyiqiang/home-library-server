@@ -20,7 +20,7 @@ func (c *Controller) GetOneMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	movie, err := c.Service.GetOneMovie(id)
+	movie, err := c.Service.GetOneBook(id)
 
 	err = utils.WriteJSON(w, http.StatusOK, movie, "movie")
 	if err != nil {
@@ -31,7 +31,7 @@ func (c *Controller) GetOneMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) GetAllMovies(w http.ResponseWriter, r *http.Request) {
-	movies, err := c.Service.GetAllMovies()
+	movies, err := c.Service.GetAllBooks()
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
