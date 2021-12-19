@@ -21,7 +21,7 @@ func WriteJSON(w http.ResponseWriter, status int, data interface{}, wrap string)
 	return err
 }
 
-func ErrorJSON(w http.ResponseWriter, err error) {
+func ErrorJSON(w http.ResponseWriter, err error, statusCode ...int) {
 	type jsonError struct {
 		Message string `json:"message"`
 	}
@@ -30,5 +30,10 @@ func ErrorJSON(w http.ResponseWriter, err error) {
 		Message: err.Error(),
 	}
 
-	WriteJSON(w, http.StatusBadRequest, theError, "error")
+	if len(statusCode) < 0 {
+		WriteJSON(w, http.StatusBadRequest, theError, "error")
+	}
+
+	status := statusCode[0]
+	WriteJSON(w, status, theError, "error")
 }

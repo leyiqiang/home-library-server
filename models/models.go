@@ -13,4 +13,5 @@ type Book struct {
 	Rating      int            `json:"rating"`
 	CreatedAt   time.Time      `json:"-"`
 	Genre       map[int]string `json:"genres"`
+	ISBN        string         `json:"isbn"`
 }

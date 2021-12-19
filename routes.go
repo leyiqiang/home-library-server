@@ -9,5 +9,6 @@ func Routers(c *controllers.Controller) *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/book/{bookID}", c.GetOneBook)
 	router.Get("/books", c.GetAllBooks)
+	router.Post("/book", c.AddBook)
 	return router
 }
