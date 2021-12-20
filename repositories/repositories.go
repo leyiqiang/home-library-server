@@ -1,4 +1,4 @@
-package interfaces
+package repositories
 
 import "github.com/leyiqiang/home-library-server/models"
 

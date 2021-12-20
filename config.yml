@@ -1,6 +1,6 @@
 database:
-  uri: "mongodb://localhost:27017"
-  databasename: "home-library"
+  uri: "mongodb://my_db:27017"
+  name: "home-library"
   username: "user"
   password: "password"
 server:

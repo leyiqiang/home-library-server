@@ -18,12 +18,9 @@ func init() {
 }
 
 func main() {
-
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
-
 	repo := repositories.NewMongoRepo()
-	//service := services.NewService(repo)
-	controller := controllers.Controller{repo}
+	controller := controllers.Controller{Repo: repo}
 	r := Routers(&controller)
 
 	srv := &http.Server{

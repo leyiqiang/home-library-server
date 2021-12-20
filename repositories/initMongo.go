@@ -3,29 +3,46 @@ package repositories
 import (
 	"context"
 	"github.com/leyiqiang/home-library-server/config"
-	"github.com/leyiqiang/home-library-server/interfaces"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"time"
 )
 
+const BooksCollectionString = "Books"
+
 type mongoRepo struct {
-	Client *mongo.Client
+	booksCollection *mongo.Collection
 }
 
 var cfg config.Config
 
-func NewMongoRepo() interfaces.Repository {
-	cfg.Read()
+func NewMongoRepo() Repository {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.Database.URI))
+	cfg.Read()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.Database.URI).SetAuth(
+		options.Credential{
+			Username: cfg.Database.Username,
+			Password: cfg.Database.Password,
+		}))
 	if err != nil {
 		log.Fatal(err)
 	}
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		log.Fatal(err)
+	}
+	database := client.Database(cfg.Database.Name)
+	booksCollection := database.Collection(BooksCollectionString)
 
+	//defer func() {
+	//	if err = client.Disconnect(ctx); err != nil {
+	//		panic(err)
+	//	}
+	//}()
 	return &mongoRepo{
-		Client: client,
+		booksCollection: booksCollection,
 	}
 }
