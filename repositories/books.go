@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func (r *mongoRepo) GetBookByID(id int) (*models.Book, error) {
+func (r *mongoRepo) GetBookByID(id string) (*models.Book, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -26,7 +26,6 @@ func (r *mongoRepo) GetBookByID(id int) (*models.Book, error) {
 	} else if err != nil {
 		log.Fatal(err)
 	}
-
 	return &book, nil
 }
 

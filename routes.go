@@ -7,8 +7,16 @@ import (
 
 func Routers(c *controllers.Controller) *chi.Mux {
 	router := chi.NewRouter()
-	router.Get("/book/{bookID}", c.GetOneBook)
-	router.Get("/books", c.GetAllBooks)
-	router.Post("/book", c.AddBook)
+
+	router.Route("/book", func(r chi.Router) {
+		r.Get("/{bookID}", c.GetOneBook)
+		r.Get("/all", c.GetAllBooks)
+		r.Post("/", c.AddBook)
+	})
+
+	router.Route("/user", func(r chi.Router) {
+		r.Post("/register", c.Register)
+	})
+
 	return router
 }

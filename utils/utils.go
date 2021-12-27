@@ -2,8 +2,18 @@ package utils
 
 import (
 	"encoding/json"
+	"errors"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
+
+func GetHash(pwd []byte) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+	if err != nil {
+		return "", errors.New("error Encrypting string")
+	}
+	return string(hash), nil
+}
 
 func WriteJSON(w http.ResponseWriter, status int, data interface{}, wrap string) error {
 	wrapper := make(map[string]interface{})
@@ -30,8 +40,9 @@ func ErrorJSON(w http.ResponseWriter, err error, statusCode ...int) {
 		Message: err.Error(),
 	}
 
-	if len(statusCode) < 0 {
+	if len(statusCode) <= 0 {
 		WriteJSON(w, http.StatusBadRequest, theError, "error")
+		return
 	}
 
 	status := statusCode[0]

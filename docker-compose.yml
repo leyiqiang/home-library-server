@@ -17,8 +17,8 @@ services:
       MONGO_INITDB_DATABASE: "home-library"
       MONGO_INITDB_ROOT_USERNAME: "user"
       MONGO_INITDB_ROOT_PASSWORD: "password"
-
-    volumes:
-      - ./mongo-volume:/data/db
     ports:
       - "27017:27017"
+    volumes:
+      - ./mongo-volume:/data/db
+

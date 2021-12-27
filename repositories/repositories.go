@@ -3,11 +3,16 @@ package repositories
 import "github.com/leyiqiang/home-library-server/models"
 
 type BooksRepository interface {
-	GetBookByID(id int) (*models.Book, error)
+	GetBookByID(id string) (*models.Book, error)
 	GetAllBooks() ([]*models.Book, error)
 	AddBook(book models.Book) error
 }
 
+type UsersRepository interface {
+	Register(user models.User) error
+}
+
 type Repository interface {
 	BooksRepository
+	UsersRepository
 }
