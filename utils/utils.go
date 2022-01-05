@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+//var ErrNotFound = errors.New("not found")
+
 func GetHash(pwd []byte) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
 	if err != nil {
@@ -16,7 +18,7 @@ func GetHash(pwd []byte) (string, error) {
 }
 
 func WriteJSON(w http.ResponseWriter, status int, data interface{}, wrap string) error {
-	wrapper := make(map[string]interface{})
+	wrapper := make(map[string]interface{}, 0)
 	wrapper[wrap] = data
 
 	js, err := json.Marshal(wrapper)

@@ -22,6 +22,22 @@ func (c *Controller) GetOneBook(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (c *Controller) DeleteBook(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "bookID")
+
+	err := c.Repo.DeleteBookByID(id)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+	err = utils.WriteJSON(w, http.StatusOK, "success", "message")
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+}
+
 func (c *Controller) GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	books, err := c.Repo.GetAllBooks()
 	if err != nil {
@@ -55,6 +71,33 @@ func (c *Controller) AddBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = utils.WriteJSON(w, http.StatusCreated, "", "book")
+	err = utils.WriteJSON(w, http.StatusCreated, "created", "message")
 
+}
+
+func (c *Controller) UpdateBook(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	var book models.Book
+	err := json.NewDecoder(r.Body).Decode(&book)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	validate = validator.New()
+	err = validate.Struct(book)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+
+	}
+	var updatedBook *models.Book
+	updatedBook, err = c.Repo.UpdateBookByID(book.ID.String(), book)
+
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	err = utils.WriteJSON(w, http.StatusCreated, updatedBook, "book")
 }

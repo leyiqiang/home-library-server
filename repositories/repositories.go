@@ -6,6 +6,8 @@ type BooksRepository interface {
 	GetBookByID(id string) (*models.Book, error)
 	GetAllBooks() ([]*models.Book, error)
 	AddBook(book models.Book) error
+	DeleteBookByID(id string) error
+	UpdateBookByID(id string, newBookInfo models.Book) (*models.Book, error)
 }
 
 type UsersRepository interface {
