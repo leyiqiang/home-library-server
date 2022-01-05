@@ -30,10 +30,6 @@ func (c *Controller) GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = utils.WriteJSON(w, http.StatusOK, books, "books")
-	if err != nil {
-		utils.ErrorJSON(w, err)
-		return
-	}
 }
 
 func (c *Controller) AddBook(w http.ResponseWriter, r *http.Request) {
