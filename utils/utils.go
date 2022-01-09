@@ -17,11 +17,17 @@ func GetHash(pwd []byte) (string, error) {
 	return string(hash), nil
 }
 
-func WriteJSON(w http.ResponseWriter, status int, data interface{}, wrap string) error {
+func WriteJSON(w http.ResponseWriter, status int, data interface{}, wrap ...string) error {
 	wrapper := make(map[string]interface{}, 0)
-	wrapper[wrap] = data
+	var js []byte
+	var err error
+	if len(wrap) > 0 {
+		wrapper[wrap[0]] = data
+		js, err = json.Marshal(wrapper)
+	} else {
+		js, err = json.Marshal(data)
+	}
 
-	js, err := json.Marshal(wrapper)
 	if err != nil {
 		return err
 	}
@@ -43,10 +49,10 @@ func ErrorJSON(w http.ResponseWriter, err error, statusCode ...int) {
 	}
 
 	if len(statusCode) <= 0 {
-		WriteJSON(w, http.StatusBadRequest, theError, "error")
+		WriteJSON(w, http.StatusBadRequest, theError)
 		return
 	}
 
 	status := statusCode[0]
-	WriteJSON(w, status, theError, "error")
+	WriteJSON(w, status, theError)
 }

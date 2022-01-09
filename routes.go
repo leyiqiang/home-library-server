@@ -14,11 +14,12 @@ func Routers(c *controllers.Controller) *chi.Mux {
 		AllowCredentials: true,
 	}))
 	router.Route("/book", func(r chi.Router) {
+		r.Get("/all", c.GetAllBooks)
+		r.Post("/", c.AddBook)
 		r.Get("/{bookID}", c.GetOneBook)
 		r.Delete("/{bookID}", c.DeleteBook)
 		r.Put("/{bookID}", c.UpdateBook)
-		r.Get("/all", c.GetAllBooks)
-		r.Post("/", c.AddBook)
+
 	})
 
 	router.Route("/user", func(r chi.Router) {
