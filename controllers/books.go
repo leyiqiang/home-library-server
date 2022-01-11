@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"github.com/leyiqiang/home-library-server/models"
@@ -63,6 +64,9 @@ func (c *Controller) AddBook(w http.ResponseWriter, r *http.Request) {
 		utils.ErrorJSON(w, err)
 		return
 
+	}
+	if book.ImportedDate.IsZero() {
+		fmt.Println("nil!")
 	}
 	err = c.Repo.AddBook(book)
 
