@@ -82,6 +82,7 @@ func (c *Controller) AddBook(w http.ResponseWriter, r *http.Request) {
 
 func (c *Controller) UpdateBook(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
+	id := chi.URLParam(r, "bookID")
 	var book models.Book
 	err := json.NewDecoder(r.Body).Decode(&book)
 	if err != nil {
@@ -97,7 +98,7 @@ func (c *Controller) UpdateBook(w http.ResponseWriter, r *http.Request) {
 
 	}
 	var updatedBook *models.Book
-	updatedBook, err = c.Repo.UpdateBookByID(book.ID.String(), book)
+	updatedBook, err = c.Repo.UpdateBookByID(id, book)
 
 	if err != nil {
 		utils.ErrorJSON(w, err)

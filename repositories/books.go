@@ -98,7 +98,11 @@ func (r *mongoRepo) UpdateBookByID(id string, newBookInfo models.Book) (*models.
 	filter := bson.D{{
 		"_id", objID,
 	}}
-	res := r.booksCollection.FindOneAndUpdate(ctx, filter, &newBookInfo)
+
+	update := bson.M{
+		"$set": newBookInfo,
+	}
+	res := r.booksCollection.FindOneAndUpdate(ctx, filter, update)
 
 	if res.Err() != nil {
 		return nil, res.Err()
