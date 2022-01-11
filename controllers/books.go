@@ -68,14 +68,15 @@ func (c *Controller) AddBook(w http.ResponseWriter, r *http.Request) {
 	if book.ImportedDate.IsZero() {
 		fmt.Println("nil!")
 	}
-	err = c.Repo.AddBook(book)
+	var oid string
+	oid, err = c.Repo.AddBook(book)
 
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
 	}
 
-	err = utils.WriteJSON(w, http.StatusCreated, "created", "message")
+	err = utils.WriteJSON(w, http.StatusCreated, oid, "oid")
 
 }
 

@@ -78,16 +78,16 @@ func (r *mongoRepo) GetAllBooks() ([]*models.Book, error) {
 	return books, nil
 }
 
-func (r *mongoRepo) AddBook(book models.Book) error {
+func (r *mongoRepo) AddBook(book models.Book) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	_, err := r.booksCollection.InsertOne(ctx, &book)
-
+	res, err := r.booksCollection.InsertOne(ctx, &book)
 	if err != nil {
 		log.Fatal(err)
-		return err
+		return "", err
 	}
-	return nil
+	oid := res.InsertedID.(primitive.ObjectID)
+	return oid.Hex(), nil
 }
 
 func (r *mongoRepo) UpdateBookByID(id string, newBookInfo models.Book) (*models.Book, error) {
