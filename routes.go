@@ -17,7 +17,7 @@ func Routers(c *controllers.Controller) *chi.Mux {
 	}))
 	r.Route("/book", func(r chi.Router) {
 		r.Get("/all", c.GetAllBooks)
-		r.Post("/", c.AddBook)
+		r.Get("/{bookID}", c.GetOneBook)
 
 	})
 
@@ -34,8 +34,8 @@ func adminRouter(c *controllers.Controller) http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.AdminOnly)
 	r.Route("/book", func(r chi.Router) {
-		r.Get("/all", c.GetAllBooks)
-		r.Get("/{bookID}", c.GetOneBook)
+		r.Post("/", c.AddBook)
+		r.Put("/{bookID}", c.UpdateBook)
 		r.Delete("/{bookID}", c.DeleteBook)
 	})
 	return r
