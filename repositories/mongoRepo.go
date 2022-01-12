@@ -12,10 +12,14 @@ import (
 
 const BooksCollectionString = "Books"
 const UsersCollectionString = "Users"
+const SchedulesCollectionString = "Schedules"
+const reservationsCollectionString = "Reservations"
 
 type mongoRepo struct {
-	booksCollection *mongo.Collection
-	usersCollection *mongo.Collection
+	booksCollection        *mongo.Collection
+	schedulesCollection    *mongo.Collection
+	reservationsCollection *mongo.Collection
+	usersCollection        *mongo.Collection
 }
 
 var cfg config.Config
@@ -39,13 +43,18 @@ func NewMongoRepo() Repository {
 	database := client.Database(cfg.Database.Name)
 	booksCollection := database.Collection(BooksCollectionString)
 	usersCollection := database.Collection(UsersCollectionString)
+	schedulesCollection := database.Collection(SchedulesCollectionString)
+	reservationsCollection := database.Collection(reservationsCollectionString)
+
 	//defer func() {
 	//	if err = client.Disconnect(ctx); err != nil {
 	//		panic(err)
 	//	}
 	//}()
 	return &mongoRepo{
-		booksCollection: booksCollection,
-		usersCollection: usersCollection,
+		booksCollection:        booksCollection,
+		schedulesCollection:    schedulesCollection,
+		reservationsCollection: reservationsCollection,
+		usersCollection:        usersCollection,
 	}
 }
