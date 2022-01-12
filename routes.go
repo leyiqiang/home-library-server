@@ -4,27 +4,39 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/leyiqiang/home-library-server/controllers"
+	"github.com/leyiqiang/home-library-server/middleware"
+	"net/http"
 )
 
 func Routers(c *controllers.Controller) *chi.Mux {
-	router := chi.NewRouter()
-	router.Use(cors.Handler(cors.Options{
+	r := chi.NewRouter()
+	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowCredentials: true,
 	}))
-	router.Route("/book", func(r chi.Router) {
+	r.Route("/book", func(r chi.Router) {
 		r.Get("/all", c.GetAllBooks)
 		r.Post("/", c.AddBook)
-		r.Get("/{bookID}", c.GetOneBook)
-		r.Delete("/{bookID}", c.DeleteBook)
-		r.Put("/{bookID}", c.UpdateBook)
 
 	})
 
-	router.Route("/user", func(r chi.Router) {
+	r.Route("/user", func(r chi.Router) {
 		r.Post("/register", c.Register)
 	})
 
-	return router
+	r.Mount("/admin", adminRouter(c))
+
+	return r
+}
+
+func adminRouter(c *controllers.Controller) http.Handler {
+	r := chi.NewRouter()
+	r.Use(middleware.AdminOnly)
+	r.Route("/book", func(r chi.Router) {
+		r.Get("/all", c.GetAllBooks)
+		r.Get("/{bookID}", c.GetOneBook)
+		r.Delete("/{bookID}", c.DeleteBook)
+	})
+	return r
 }

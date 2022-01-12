@@ -1,6 +1,9 @@
 package middleware
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 // TODO may not needed
 func EnableCORS(next http.Handler) http.Handler {
@@ -8,4 +11,12 @@ func EnableCORS(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		next.ServeHTTP(w, r)
 	})
+}
+
+func AdminOnly(next http.Handler) http.Handler {
+	fmt.Println("Admin verification")
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		next.ServeHTTP(w, r)
+	})
+
 }
