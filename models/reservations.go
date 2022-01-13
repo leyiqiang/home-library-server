@@ -6,6 +6,6 @@ import (
 
 type Reservation struct {
 	ID       primitive.ObjectID `json:"_id" bson:"_id,omitempty"`
-	Calendar primitive.ObjectID `json:"calendar" bson:"calendar,required"`
+	Schedule primitive.ObjectID `json:"schedule" bson:"schedule" validate:"required"`
 	Name     string             `json:"name" bson:"name" validate:"required"`
 }

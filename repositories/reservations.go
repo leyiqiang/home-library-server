@@ -12,34 +12,34 @@ import (
 )
 
 // TODO remember to populate!
-func (r *mongoRepo) GetScheduleByID(id string) (*models.Schedule, error) {
+func (r *mongoRepo) GetReservationsByID(id string) (*models.Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	var schedule models.Schedule
+	var reservation models.Reservation
 	objID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{{
 		"_id", objID,
 	}}
-	err := r.schedulesCollection.FindOne(ctx, filter).Decode(&schedule)
+	err := r.reservationsCollection.FindOne(ctx, filter).Decode(&reservation)
 	if err == mongo.ErrNoDocuments {
 		// Do something when no record was found
 		return nil, errors.New("record does not exist")
 	} else if err != nil {
 		log.Fatal(err)
 	}
-	return &schedule, nil
+	return &reservation, nil
 }
 
 // TODO : be careful! need to delete reservations as well
-func (r *mongoRepo) DeleteScheduleByID(id string) error {
+func (r *mongoRepo) DeleteReservationByID(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	objID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{{
 		"_id", objID,
 	}}
-	_, err := r.schedulesCollection.DeleteOne(ctx, filter)
+	_, err := r.reservationsCollection.DeleteOne(ctx, filter)
 	if err == mongo.ErrNoDocuments {
 		// Do something when no record was found
 		return err
@@ -50,13 +50,16 @@ func (r *mongoRepo) DeleteScheduleByID(id string) error {
 }
 
 // TODO remember to populate!
-func (r *mongoRepo) GetAllSchedules() ([]*models.Schedule, error) {
-	var schedules []*models.Schedule
+func (r *mongoRepo) GetReservationsByScheduleID(id string) ([]*models.Reservation, error) {
+	var reservations []*models.Reservation
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-
-	cur, err := r.schedulesCollection.Find(ctx, bson.D{})
+	objID, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.D{{
+		"schedule", objID,
+	}}
+	cur, err := r.reservationsCollection.Find(ctx, filter)
 
 	if err != nil {
 		log.Fatal(err)
@@ -65,26 +68,26 @@ func (r *mongoRepo) GetAllSchedules() ([]*models.Schedule, error) {
 	defer cur.Close(ctx)
 
 	for cur.Next(ctx) {
-		var schedule *models.Schedule
-		err := cur.Decode(&schedule)
+		var reservation *models.Reservation
+		err := cur.Decode(&reservation)
 		if err != nil {
 			log.Fatal(err)
 			return nil, err
 		}
-		schedules = append(schedules, schedule)
+		reservations = append(reservations, reservation)
 	}
 
 	if err := cur.Err(); err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
-	return schedules, nil
+	return reservations, nil
 }
 
-func (r *mongoRepo) AddSchedule(schedule models.Schedule) (string, error) {
+func (r *mongoRepo) AddReservation(reservation models.Reservation) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	res, err := r.schedulesCollection.InsertOne(ctx, &schedule)
+	res, err := r.reservationsCollection.InsertOne(ctx, &reservation)
 	if err != nil {
 		log.Fatal(err)
 		return "", err
@@ -93,7 +96,7 @@ func (r *mongoRepo) AddSchedule(schedule models.Schedule) (string, error) {
 	return oid.Hex(), nil
 }
 
-func (r *mongoRepo) UpdateScheduleByID(id string, newData models.Schedule) (*models.Schedule, error) {
+func (r *mongoRepo) UpdateReservationByID(id string, newData models.Reservation) (*models.Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	objID, _ := primitive.ObjectIDFromHex(id)
@@ -105,12 +108,12 @@ func (r *mongoRepo) UpdateScheduleByID(id string, newData models.Schedule) (*mod
 	update := bson.M{
 		"$set": newData,
 	}
-	res := r.schedulesCollection.FindOneAndUpdate(ctx, filter, update)
+	res := r.reservationsCollection.FindOneAndUpdate(ctx, filter, update)
 
 	if res.Err() != nil {
 		return nil, res.Err()
 	}
-	var schedule models.Schedule
-	res.Decode(&schedule)
-	return &schedule, nil
+	var reservation models.Reservation
+	res.Decode(&reservation)
+	return &reservation, nil
 }

@@ -8,10 +8,11 @@ import (
 )
 
 type Schedule struct {
-	ID    primitive.ObjectID `json:"_id" bson:"_id,omitempty"`
-	Title string             `json:"title" bson:"title" validate:"required""`
-	Start DateTime           `json:"start" json:"start" validate:"required"`
-	End   DateTime           `json:"end" json:"end" validate:"required"`
+	ID      primitive.ObjectID `json:"_id" bson:"_id,omitempty"`
+	Title   string             `json:"title" bson:"title" validate:"required""`
+	Start   DateTime           `json:"start" bson:"start" validate:"required"`
+	End     DateTime           `json:"end" bson:"end" validate:"required"`
+	MaxSlot int                `json:"maxSlot" bson:"maxSlot" validate:"required"`
 }
 
 type DateTime struct {

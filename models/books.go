@@ -12,7 +12,7 @@ type Book struct {
 	Title        string             `json:"title" bson:"title" validate:"required""`
 	Author       string             `json:"author" bson:"author"`
 	Publisher    string             `json:"publisher" bson:"publisher"`
-	ImportedDate ImportedDate       `json:"importedDate" json:"importedDate"`
+	ImportedDate ImportedDate       `json:"importedDate" bson:"importedDate"`
 	Location     string             `json:"location" bson:"location"`
 	Category     string             `json:"category" bson:"category"`
 	ISBN         string             `json:"isbn" bson:"isbn"`

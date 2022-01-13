@@ -19,6 +19,11 @@ type SchedulesRepository interface {
 }
 
 type ReservationsRepository interface {
+	GetReservationsByID(id string) (*models.Reservation, error)
+	DeleteReservationByID(id string) error
+	GetReservationsByScheduleID(id string) ([]*models.Reservation, error)
+	AddReservation(reservation models.Reservation) (string, error)
+	UpdateReservationByID(id string, newData models.Reservation) (*models.Reservation, error)
 }
 
 type UsersRepository interface {
