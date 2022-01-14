@@ -21,6 +21,11 @@ func Routers(c *controllers.Controller) *chi.Mux {
 
 	})
 
+	r.Route("/schedule", func(r chi.Router) {
+		r.Get("/all", c.GetOneBook) // todo change to get all schedules
+		// /{scheduleID}
+	})
+
 	r.Route("/user", func(r chi.Router) {
 		r.Post("/register", c.Register)
 	})
