@@ -22,8 +22,8 @@ func Routers(c *controllers.Controller) *chi.Mux {
 	})
 
 	r.Route("/schedule", func(r chi.Router) {
-		r.Get("/all", c.GetOneBook) // todo change to get all schedules
-		// /{scheduleID}
+		r.Get("/all", c.GetAllSchedules)
+		r.Get("/{scheduleID}", c.GetAllSchedules)
 	})
 
 	r.Route("/user", func(r chi.Router) {
@@ -42,6 +42,12 @@ func adminRouter(c *controllers.Controller) http.Handler {
 		r.Post("/", c.AddBook)
 		r.Put("/{bookID}", c.UpdateBook)
 		r.Delete("/{bookID}", c.DeleteBook)
+	})
+
+	r.Route("/schedule", func(r chi.Router) {
+		r.Post("/", c.AddSchedule)
+		r.Put("/{scheduleID}", c.UpdateSchedule)
+		r.Delete("/{scheduleID}", c.DeleteSchedule)
 	})
 	return r
 }

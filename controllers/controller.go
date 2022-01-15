@@ -16,6 +16,8 @@ type Controller struct {
 	Repo repositories.Repository
 	BooksController
 	UsersController
+	SchedulesController
+	ReservationsController
 }
 
 type BooksController interface {
@@ -24,6 +26,17 @@ type BooksController interface {
 	AddBook(w http.ResponseWriter, r *http.Request)
 	DeleteBook(w http.ResponseWriter, r *http.Request)
 	UpdateBook(w http.ResponseWriter, r *http.Request)
+}
+
+type SchedulesController interface {
+	GetOneSchedule(w http.ResponseWriter, r *http.Request)
+	GetAllSchedules(w http.ResponseWriter, r *http.Request)
+	AddSchedule(w http.ResponseWriter, r *http.Request)
+	DeleteSchedule(w http.ResponseWriter, r *http.Request)
+	UpdateSchedule(w http.ResponseWriter, r *http.Request)
+}
+
+type ReservationsController interface {
 }
 
 type UsersController interface {
