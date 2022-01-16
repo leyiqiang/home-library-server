@@ -9,11 +9,20 @@ import (
 	"net/http"
 )
 
+type SchedulePayload struct {
+	models.Schedule
+	Reservations []*models.Reservation `json:"reservations" bson:"reservations"`
+}
+
+// TODO check if reference work!
 func (c *Controller) GetOneSchedule(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "scheduleID")
-
+	var payload SchedulePayload
 	schedule, err := c.Repo.GetScheduleByID(id)
-
+	payload.Schedule = *schedule
+	var reservations []*models.Reservation
+	reservations, err = c.Repo.GetReservationsByScheduleID(schedule.ID.Hex())
+	payload.Reservations = reservations
 	err = utils.WriteJSON(w, http.StatusOK, schedule, "schedule")
 	if err != nil {
 		utils.ErrorJSON(w, err)
@@ -22,6 +31,7 @@ func (c *Controller) GetOneSchedule(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// TODO : be careful! need to delete reservations as well
 func (c *Controller) DeleteSchedule(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "scheduleID")
 
@@ -38,6 +48,7 @@ func (c *Controller) DeleteSchedule(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// TODO remember to populate!
 func (c *Controller) GetAllSchedules(w http.ResponseWriter, r *http.Request) {
 	schedules, err := c.Repo.GetAllSchedules()
 	if err != nil {
@@ -48,6 +59,7 @@ func (c *Controller) GetAllSchedules(w http.ResponseWriter, r *http.Request) {
 	err = utils.WriteJSON(w, http.StatusOK, schedules, "schedules")
 }
 
+// TODO init reservation with empty
 func (c *Controller) AddSchedule(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var schedule models.Schedule

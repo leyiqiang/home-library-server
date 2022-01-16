@@ -11,7 +11,6 @@ import (
 	"time"
 )
 
-// TODO remember to populate!
 func (r *mongoRepo) GetScheduleByID(id string) (*models.Schedule, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -31,7 +30,6 @@ func (r *mongoRepo) GetScheduleByID(id string) (*models.Schedule, error) {
 	return &schedule, nil
 }
 
-// TODO : be careful! need to delete reservations as well
 func (r *mongoRepo) DeleteScheduleByID(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -49,7 +47,6 @@ func (r *mongoRepo) DeleteScheduleByID(id string) error {
 	return nil
 }
 
-// TODO remember to populate!
 func (r *mongoRepo) GetAllSchedules() ([]*models.Schedule, error) {
 	var schedules []*models.Schedule
 
