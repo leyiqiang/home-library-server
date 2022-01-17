@@ -7,4 +7,5 @@ type User struct {
 	Username string             `json:"username" bson:"username" validate:"required,alphanum""`
 	Name     string             `json:"name" bson:"name" validate:"alphanumunicode"`
 	Password string             `json:"password" bson:"password" validate:"required"`
+	IsAdmin  bool               `json:"isAdmin" bson:"isAdmin" validate:"required"`
 }

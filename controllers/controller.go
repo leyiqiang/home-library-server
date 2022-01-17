@@ -41,4 +41,5 @@ type ReservationsController interface {
 
 type UsersController interface {
 	Register(w http.ResponseWriter, r *http.Request)
+	SignIn(w http.ResponseWriter, r *http.Request)
 }

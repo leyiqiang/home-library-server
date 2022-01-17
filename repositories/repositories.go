@@ -27,7 +27,8 @@ type ReservationsRepository interface {
 }
 
 type UsersRepository interface {
-	Register(user models.User) error
+	AddUser(user models.User) error
+	FindUserByUsername(username string) (*models.User, error)
 }
 
 type Repository interface {

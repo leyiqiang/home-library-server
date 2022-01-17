@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Server   Server
 	Database Database
+	Auth     Auth
 }
 
 type Database struct {

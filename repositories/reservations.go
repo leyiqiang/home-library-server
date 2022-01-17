@@ -51,10 +51,10 @@ func (r *mongoRepo) DeleteReservationByID(id string) error {
 
 // TODO remember to populate!
 func (r *mongoRepo) GetReservationsByScheduleID(id string) ([]*models.Reservation, error) {
-	var reservations []*models.Reservation
-
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
+
+	var reservations []*models.Reservation
 	objID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{{
 		"schedule", objID,
